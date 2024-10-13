@@ -1,0 +1,160 @@
+<template>
+    <lightning-card icon-name="standard:forecasts" variant="base">
+        <div slot="title">
+            Buscar en SMART
+        </div>
+        <div class="container">
+            <lightning-layout>
+                <lightning-layout-item size="9" padding="around-small">
+                    <lightning-input variant="label-inline" label="¿Cuál es el DNI del alumno?" type="text" value={dni} onchange={changeDNI}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="3" padding="around-small">
+                    <lightning-button variant="brand" label="Examinar" onclick={getDatos} stretch="true"></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <!-- Mostrar datos solo si datosVisible es true -->
+            <template if:true={datosVisible}>
+                <div class="slds-p-around_small">
+                    <!-- Botones con menor margen superior -->
+                    <div class="slds-grid slds-gutters slds-wrap slds-m-top_x-small">
+                        <lightning-layout-item size="3" class="slds-p-around_small slds-size_3-of-12">
+                            <lightning-button class="slds-m-right_xx-small" variant="brand" label="Notas" onclick={getNotas} stretch="true"></lightning-button>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="3" class="slds-p-around_small slds-size_3-of-12">
+                            <lightning-button class="slds-m-right_xx-small" variant="brand" label="Asistencias" onclick={getAsistencias} stretch="true"></lightning-button>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="3" class="slds-p-around_small slds-size_3-of-12">
+                            <lightning-button class="slds-m-right_xx-small" variant="brand" label="Pagos" onclick={getPagos} stretch="true"></lightning-button>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="3" class="slds-p-around_small slds-size_3-of-12">
+                            <lightning-button variant="brand" label="Horarios" onclick={getHorarios} stretch="true"></lightning-button>
+                        </lightning-layout-item>
+                    </div>
+                </div>
+            </template>
+            
+            <!-- Mostrar datos solo si datosVisible es true -->
+            <template if:true={datosVisible}>
+                <div class="slds-p-around_small">
+                    <!-- Primera Fila: Id Actor y Código -->
+                    <div class="slds-grid slds-gutters slds-p-top_x-small">
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Id Actor:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.idActor}</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Código:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.codigo}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Segunda Fila: Nombre Completo y Número de Identidad -->
+                    <div class="slds-grid slds-gutters slds-p-top_x-small">
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Nombre Completo:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.nombreCompleto}</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Número de Identidad:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.numeroIdentidad}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tercera Fila: Paterno y Materno -->
+                    <div class="slds-grid slds-gutters slds-p-top_x-small">
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Paterno:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.paterno}</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Materno:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.materno}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cuarta Fila: Nombres y Correo Personal -->
+                    <div class="slds-grid slds-gutters slds-p-top_x-small">
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Nombres:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.nombres}</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Correo Personal:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.correoPersonal}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quinta Fila: Correo Institucional y Teléfono -->
+                    <div class="slds-grid slds-gutters slds-p-top_x-small">
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Correo Institucional:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.correoInstitucional}</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Teléfono:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.telefono}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sexta Fila: Fecha de Nacimiento y Edad -->
+                    <div class="slds-grid slds-gutters slds-p-top_x-small">
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Fecha de Nacimiento:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.fechaNacimiento}</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-form-element slds-form-element_readonly">
+                            <span class="slds-form-element__label">Edad:</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{alumno.edad}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+    <!-- Componentes Secundarios -->
+    <template if:true={notasVisible}>
+        <c-notas notas={notas} onhideme={closeChildren}></c-notas>
+    </template>
+
+    <template if:true={asistenciasVisible}>
+        <c-asistencias asistencias={asistencias} onhideme={closeChildren}></c-asistencias>
+    </template>
+
+    <template if:true={pagosVisible}>
+        <c-pagos pagos={pagos} onhideme={closeChildren}></c-pagos>
+    </template>
+
+    <template if:true={horariosVisible}>
+        <c-horarios horarios={horarios} onhideme={closeChildren}></c-horarios>
+    </template>
+
+    <!-- Spinner de Carga -->
+    <template if:true={spinnerVisible}>
+        <c-reusable-spinner></c-reusable-spinner>
+    </template>
+</template>

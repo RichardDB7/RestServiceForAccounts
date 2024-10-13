@@ -1,0 +1,90 @@
+<template>
+
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+
+        <div class="slds-modal__container">
+
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Horarios</h2>
+            </header>
+
+            <div class="slds-modal__content slds-p-around_medium">
+
+                <lightning-tabset active-tab-value={periodoDefault}>
+                    <template for:each={horarios} for:item="periodo">
+                        <lightning-tab class="slds-m-around_medium" key={periodo} label={periodo.periodo} value={periodo.periodo} onactive={changeTab}>
+                            <div class="horarios-grid">
+
+                                <template for:each={dias} for:item="dia">
+                                    <div key={dia} class="dias-elem">
+                                        <p>{dia.diaNombre}</p>
+                                    </div>
+                                </template>
+
+                                <template for:each={periodo.horas} for:item="hora">
+                                    <div key={hora} class="horas-elem">
+                                        <p>{hora.horario}</p>
+                                    </div>
+                                </template>
+
+                                <template for:each={periodo.datosHorario} for:item="horario">
+                                    <div key={horario} class="horarios-elem">
+                                        <p data-id={horario.curso} onclick={showDetail}>{horario.curso}</p>
+                                        <p class="horario-label">{horario.horaInicio} - {horario.horaFin}</p>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <template if:true={detailVisible}>
+                                <div class="slds-grid slds-gutters slds-p-horizontal_xx-large">
+                                    <div class="slds-col slds-size_1-of-5 slds-form-element slds-form-element_readonly">
+                                        <span class="slds-form-element__label">Curso:</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{detail.curso}</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-5 slds-form-element slds-form-element_readonly">
+                                        <span class="slds-form-element__label">Horario:</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{detail.horaInicio} - {detail.horaFin}</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-5 slds-form-element slds-form-element_readonly">
+                                        <span class="slds-form-element__label">Docente:</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{detail.docente}</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-5 slds-form-element slds-form-element_readonly">
+                                        <span class="slds-form-element__label">Ambiente:</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{detail.ambiente}</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-5 slds-form-element slds-form-element_readonly">
+                                        <span class="slds-form-element__label">Modalidad:</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">{detail.modalidad}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                        </lightning-tab>
+                    </template>
+                </lightning-tabset>
+            </div>
+
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={close}>Cerrar</button>
+            </footer>
+
+        </div>
+
+    </section>
+
+    <template if:true={spinnerVisible}>
+        <c-reusable-spinner></c-reusable-spinner>
+    </template>
+
+</template>

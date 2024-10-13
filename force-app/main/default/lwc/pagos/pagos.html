@@ -1,0 +1,33 @@
+<template>
+
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+
+        <div class="slds-modal__container">
+
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Pagos</h2>
+            </header>
+
+            <div class="slds-modal__content slds-p-around_medium">
+                <lightning-tabset active-tab-value={periodoDefault}>
+                    <template for:each={pagos} for:item="periodo">
+                        <lightning-tab key={periodo} label={periodo.periodo} value={periodo.periodo}>
+                            <lightning-datatable data={periodo.datosPago} columns={columns} key-field="nombre" hide-checkbox-column></lightning-datatable>
+                        </lightning-tab>
+                    </template>
+                </lightning-tabset>
+            </div>
+
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={close}>Cerrar</button>
+            </footer>
+
+        </div>
+
+    </section>
+
+    <template if:true={spinnerVisible}>
+        <c-reusable-spinner></c-reusable-spinner>
+    </template>
+
+</template>
